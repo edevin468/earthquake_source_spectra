@@ -4,6 +4,8 @@
 Created on Fri Jun 16 10:06:20 2017
 
 @author: Alexis Klimasewski
+Edited by Emma Devin to read .ms files and work with the data we have for Ridgecrest
+
 
 inputs: reads in paths to the instrument corrected  and cut HHN and HHE channel sac files
 
@@ -27,14 +29,14 @@ from spec_func import bin_max_err
 import time
 
 #working directory here
-working_dir = '/Users/aklimase/Desktop/USGS/project/test_codes'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 
 #path to corrected seismograms
 event_dirs = glob.glob(working_dir + '/corrected/Event_*')
 outpath = working_dir + '/record_spectra'
 
 #sampling rate
-delta = 0.01
+delta = 0.05
 
 ##make event directories within corrected local data
 ##make a directory for each event
@@ -48,9 +50,9 @@ for i in range(len(events)):
 for i in range(len(event_dirs)):
     t1 = time.time()
     event = events[i][6:]
-    print i
-    print 'binning and fft of event: ' + event
-    recordpaths = glob.glob(working_dir + '/corrected/Event_' + event +'/*_*_HHN*.SAC')#full path for only specified channel
+    print(i)
+    print('binning and fft of event: ' + event)
+    recordpaths = glob.glob(working_dir + '/corrected/Event_' + event +'/*.HHN.*.ms')#full path for only specified channel
     stns = [(x.split('/')[-1]).split('_')[1] for x in recordpaths]
     for j in range(len(stns)):
         recordpath_E = glob.glob(working_dir + '/corrected/Event_' + event +'/*_' + stns[j] + '_HHE*.SAC')
@@ -113,5 +115,5 @@ for i in range(len(event_dirs)):
                     np.savetxt(outfile, data, fmt=['%E', '%E', '%E'], delimiter='\t')
                     outfile.close()
     t2 = time.time()
-    print 'time for event: (s)', (t2-t1)
+    print('time for event: (s)', (t2-t1))
         
