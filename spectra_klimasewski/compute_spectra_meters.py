@@ -32,7 +32,7 @@ import time
 working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 
 #path to corrected seismograms
-event_dirs = glob.glob(working_dir + '/corrected/Event_*')
+event_dirs = glob.glob(working_dir + '/corrected/*')
 outpath = working_dir + '/record_spectra'
 
 #sampling rate
@@ -47,33 +47,37 @@ for i in range(len(events)):
     if not path.exists(outpath + '/' + events[i]):
         os.makedirs(outpath + '/'  + events[i])
 
-for i in range(len(event_dirs)):
+for event in events:
     t1 = time.time()
-    event = events[i][6:]
-    print(i)
     print('binning and fft of event: ' + event)
-    recordpaths = glob.glob(working_dir + '/corrected/Event_' + event +'/*.HHN.*.ms')#full path for only specified channel
-    stns = [(x.split('/')[-1]).split('_')[1] for x in recordpaths]
-    for j in range(len(stns)):
-        recordpath_E = glob.glob(working_dir + '/corrected/Event_' + event +'/*_' + stns[j] + '_HHE*.SAC')
-        recordpath_N = glob.glob(working_dir + '/corrected/Event_' + event +'/*_' + stns[j] + '_HHN*.SAC')
+    
+    recordpaths = glob.glob(working_dir + '/corrected/' + event + '/*.HHN.*.mseed')#full path for only specified channel
+    stns = [(x.split('/')[-1]).split('.')[0] for x in recordpaths]
+    
+    for stn in stns:
+        recordpath_E = glob.glob(working_dir + '/corrected/' + event +'/' + stn + '.*.HHE*.mseed')
+        recordpath_N = glob.glob(working_dir + '/corrected/' + event +'/' + stn + '.*.HHN*.mseed')
+        
         if(len(recordpath_E) == 1 and len(recordpath_N) == 1):
             #North component
             base_N = path.basename(recordpath_E[0])
             base_E = path.basename(recordpath_N[0])
     
-            network = base_N.split('_')[0]
-            station = base_N.split('_')[1]
-            full_channel_N = base_N.split('_')[2]
-            full_channel_E = base_E.split('_')[2]
+            network = base_N.split('.')[1]
+            station = base_N.split('.')[0]
+            full_channel_N = base_N.split('.')[2]
+            full_channel_E = base_E.split('.')[2]
+            
             #mtspec returns power spectra (square of spectra)
             stream = read(recordpath_N[0])
             tr = stream[0]
             data = tr.data
             
             spec_amp, freq , jack, fstat, dof =  mtspec(data, delta = delta, time_bandwidth = 4, number_of_tapers=7, quadratic = True, statistics = True)
-			#find standard deviation
+            
+ 			#find standard deviation
             sigmaN = (jack[:,1] - jack[:,0])/3.29
+            
             #power spectra
             spec_array_N = np.array(spec_amp)
             freq_array_N = np.array(freq)
@@ -107,7 +111,7 @@ for i in range(len(event_dirs)):
                 #make sure that all spec is a number
                 if (np.isnan(binned_data).any() == False):
                 ##write to file
-                    outfile = open(outpath + '/Event_'+ event + '/'+ network + '_' + station + '_' + 'HHNE' + '__' + event + '.out', 'w')
+                    outfile = open(outpath + '/' +  event + '/' + network + '_' + station + '_' + 'HHNE' + '__' + event + '.out', 'w')
                     data = np.array([bins, binned_data, binned_sig])
 #                    print(outpath + event)
                     data = data.T

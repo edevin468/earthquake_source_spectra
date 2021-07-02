@@ -3,6 +3,8 @@
 """
 Created on Wed Jun 30 09:26:40 2021
 
+add columns to *.csv files created in stations_step1.py for whether or not the station data exists in each of the *.txt files
+
 @author: emmadevin
 """
 

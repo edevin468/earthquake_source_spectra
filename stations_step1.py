@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jun 30 09:19:54 2021
-create *.csv file in each event folder with information about where to find inventory files
+
+Create *.csv file in each event folder with list of stations 
+
 @author: emmadevin
 """
 
