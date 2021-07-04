@@ -29,14 +29,14 @@ import random
 #records are in m/s
 #should be binned frequencies and amplitudes
 #make list of records and the corresponding events and stations
-working_dir = '/Users/aklimase/Desktop/USGS/project/test_codes'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 outfile_path = working_dir + '/Andrews_inversion'
 
 #list of record files
-ev = glob.glob(working_dir + '/record_spectra/Event*/*')
+ev = glob.glob(working_dir + '/record_spectra/*/*')
 
 def secondo(record_path, out_file_path):
-    print 'Number of records: ', len(record_path)
+    print('Number of records: ', len(record_path))
     #read in all files to find networks and stations
     stationlist = []
     stn_lat = []
@@ -103,9 +103,9 @@ def secondo(record_path, out_file_path):
             
     t2 = time.time()
     
-    print 'time to read and distance correct all records: ', (t2-t1)/60.
-    print len(record_freq)
-    print len(record_spec)
+    print('time to read and distance correct all records: ', (t2-t1)/60.)
+    print(len(record_freq))
+    print(len(record_spec))
 
     freq_list = record_freq[0]
     print(freq_list)
@@ -136,8 +136,8 @@ def secondo(record_path, out_file_path):
     K = len(record_path)#records
     K = rows
     
-    print 'Number of events: ', I, ' Number of stations: ', J
-    print 'Number of rows (records): ', K, ' Number of cols (events+stations): ', I+J
+    print('Number of events: ', I, ' Number of stations: ', J)
+    print('Number of rows (records): ', K, ' Number of cols (events+stations): ', I+J)
     
     #make the G matrix of 1s and 0s and R matrix of records
     G1 = np.zeros((K,I))
@@ -172,7 +172,7 @@ def secondo(record_path, out_file_path):
         t1 = time.time()
         d = R[:,f]#record for given frequency col
         dT = d.T
-        print 'inverting for frequency: ', f, freq_list[f]
+        print('inverting for frequency: ', f, freq_list[f])
         G_inv = np.linalg.pinv(G, rcond=1e-13)
         covd = np.diag(cov[:,f])
 
@@ -180,7 +180,7 @@ def secondo(record_path, out_file_path):
         m1[:,f] = np.dot(G_inv,dT)
         m_cov[:,f]= covm.diagonal()
         t2 = time.time()
-        print 'time for inversion: (min) ', round((t2-t1)/60., 4)
+        print('time for inversion: (min) ', round((t2-t1)/60., 4))
     
     
     print(m1.shape)
@@ -205,7 +205,7 @@ def secondo(record_path, out_file_path):
         outfile.close()
 
 
-    print outfile_path
+    print(outfile_path)
     for i in range(J):#for each station
         amp = np.sqrt(np.power(10.0, station[i,:]))
 
