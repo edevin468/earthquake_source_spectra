@@ -54,7 +54,19 @@ for event in events:
             stn_ids.append(stn_id)
     
 
-    df = pd.DataFrame()
-    df['station_id'] = stn_ids
-                
-    df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/RC_beta/'+event+'/stations.csv')
+df = pd.DataFrame()
+ntwk_list = []
+stn_list = []
+
+for stn_id in stn_ids:
+    ntwk = stn_id.split('|')[0]
+    stn = stn_id.split('|')[1]
+    
+    ntwk_list.append(ntwk)
+    stn_list.append(stn)
+    
+    
+df['network'] = ntwk_list
+df['station'] = stn_list
+            
+df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/stations.csv')
