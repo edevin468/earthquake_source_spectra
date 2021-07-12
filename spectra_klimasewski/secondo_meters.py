@@ -4,6 +4,7 @@
 Created on Thu Jun 29 11:36:09 2017
 
 @author: Alexis Klimasewski
+Edited by Emma Devin for Ridgecrest dataset
 
 inputs: reads in the text files of NE average spectra from record_spectra
 
@@ -29,6 +30,8 @@ import pandas as pd
 #records are in m/s
 #should be binned frequencies and amplitudes
 #make list of records and the corresponding events and stations
+
+# working directory and outfil path for inversion
 working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 outfile_path = working_dir + '/Andrews_inversion'
 
@@ -38,12 +41,15 @@ stations = pd.read_csv(working_dir + '/station_locs.csv')
 #list of record files
 ev = glob.glob(working_dir + '/record_spectra/*/*')
 
+
+#===================================================================#
+
 def secondo(record_path, out_file_path):
     print('Number of records: ', len(record_path))
    
     
     # get lists of station ids and station locations
-    stationlist = stations['network'] + stations['station']
+    stn_list = (stations['network']+stations['station']).tolist()
     stn_lat = stations['latitude']
     stn_lon = stations['longitude']
     
@@ -56,27 +62,25 @@ def secondo(record_path, out_file_path):
     record_spec = []
     record_std = []
     
-    ##############################################################################
-    ## read in the phase files for event locations and get the distances between source and station
-    
     t1 = time.time()
 
-    
     for i in range(len(record_path)):
         
         # read record filename and extract event and station identifiers
         record = (record_path[i].split('/')[-1])
         base = path.basename(record)
-        event = base.split('_')[-1]
-        event = event.split('.')[0]
+        eventid = base.split('_')[-1]
+        eventid = eventid.split('.')[0]
         ntwk = base.split('_')[0]
         stn = base.split('_')[1]
         stn_id = ntwk + stn
         
-        print(event)
+        # print some updates to track progress
+        print('Event: ', eventid)
+        print('Station: ', stn)
         
-        # read phase file
-        phase_file = working_dir + '/RC_phase_beta/' + event + '.phase'
+        # read phase file fo get event locations
+        phase_file = working_dir + '/RC_phase_beta/' + eventid + '.phase'
         phase = pd.read_csv(phase_file, sep = '\s+', index_col=0, nrows = 0).columns.tolist()
         
         # assign event coordinates and depth
@@ -85,61 +89,62 @@ def secondo(record_path, out_file_path):
         evdepth = float(phase[6])
         
         # assign station corrdinates and depth
-        stlat = stn_lat[stationlist.index(stn_id)]
-     
+        stlat = stn_lat[stn_list.index(stn_id)]
+        stlon = stn_lon[stn_list.index(stn_id)]
+        stdepth = 0
         
         #find distance between event and station
         dist =  dread.compute_rrup(evlon, evlat, evdepth, stlon, stlat, stdepth) #in km
+        
         #km to m
         dist = dist*1000.
-    
-        #read in file
-        data = np.genfromtxt(record_path[i], dtype = float, comments = '#', delimiter = None, usecols = (0,1,2))#only read in first two cols
-        record_freq.append(data[:,0])##
-        #data is NE spectra
-        #square for power spectra
-    #     ###########################################################################
-    #     #propagation here for errors going lin to log power
-    #     record_spec.append((data[:,1]*dist)**2.)
-    #     std_prop = np.abs(2*(data[:,2])/(data[:,1]*np.log(10)))
-    #     record_std.append(std_prop)#in log power here
-    #     #if network and station not part of the list yet add
-    #     if station not in stationlist:
-    #         stationlist.append(station)
-    #         stn_lat.append(stlat)
-    #         stn_lon.append(stlon)
-    #     if eventid not in eventidlist:
-    #         eventidlist.append(eventid)
-    #         event_lat.append(evlat)
-    #         event_lon.append(evlon)
-    #         event_depth.append(evdepth)
-            
-    # t2 = time.time()
-    
-    # print('time to read and distance correct all records: ', (t2-t1)/60.)
-    # print(len(record_freq))
-    # print(len(record_spec))
 
-    # freq_list = record_freq[0]
-    # print(freq_list)
-    # F_bins = len(freq_list)
-    # print(F_bins)
+        #read in spectra file
+        data = np.genfromtxt(record_path[i], dtype = float, comments = '#', delimiter = None, usecols = (0,1,2))  #only read in first two cols
+        record_freq.append(data[:,0])
+        
+        # data is NE spectra; square for power spectra
+        record_spec.append((data[:,1]*dist)**2.)
+        
+        # propagation here for errors going lin to log power
+        std_prop = np.abs(2*(data[:,2])/(data[:,1]*np.log(10)))
+        record_std.append(std_prop) #in log power here
+        
+        #if event info not part of lists yet add
+        if eventid not in eventidlist:
+            eventidlist.append(eventid)
+            event_lat.append(evlat)
+            event_lon.append(evlon)
+            event_depth.append(evdepth)
+            
+    t2 = time.time()
     
-    # rows = len(record_path) #testing first 10
-    # print(rows)
+    print('Time to read and distance correct all records: ', (t2-t1)/60.)
+    print('Number of records (frequency): ', len(record_freq))
+    print('Number of records (amplitude): ',len(record_spec))
+
+    freq_list = record_freq[0]
+    print(freq_list)
+    F_bins = len(freq_list)
+    print(F_bins)
     
-    # index_matrix = [[0 for j in range(3)] for i in range(rows)]
+    rows = len(record_path) #testing first 10
+    print(rows)
     
-    # #for i in range(len(records)):
+    index_matrix = [[0 for j in range(3)] for i in range(rows)]
+    
+    for i in range(len(record_path)):
     # for i in range(rows):
-    #     record = record_path[i].split('/')[-1]
-    #     base = path.basename(record)
-    #     network, station, channel, loc = base.split('_')[0:4]
-    #     yyyy, month, day, hh, mm, ss = base.split('_')[4:]
-    #     ss = ss.split('.')[0]
-    #     eventid = yyyy + '_' + month + '_' + day + '_' + hh + '_' + mm + '_' + ss
-    #     #make a tuple of record, event, station so indices can be assigned
-    #     index_matrix[i] = [base, eventidlist.index(eventid), stationlist.index(station)]
+    # for eventid in eventidlist:
+        record = record_path[i].split('/')[-1]
+        base = path.basename(record)
+        network, station, channel, loc = base.split('_')[0:4]
+        yyyy, month, day, hh, mm, ss = base.split('_')[4:]
+        ss = ss.split('.')[0]
+        eventid = yyyy + '_' + month + '_' + day + '_' + hh + '_' + mm + '_' + ss
+        
+        #make a tuple of record, event, station so indices can be assigned
+        index_matrix[i] = [base, eventidlist.index(eventid), stn_list.index(station)]
     
     # print(eventidlist[0])
     # print(stationlist)
@@ -230,6 +235,7 @@ def secondo(record_path, out_file_path):
     #     np.savetxt(outfile, out, fmt=['%E', '%E', '%E'], delimiter='\t')
     #     outfile.close()
 
+#===================================================================#
 
 
 secondo(record_path = ev, out_file_path = outfile_path)
