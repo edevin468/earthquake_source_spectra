@@ -27,7 +27,8 @@ working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 outfile_path = working_dir + '/Andrews_inversion'
 
 # df with station locations
-stations = pd.read_csv(working_dir + '/station_counts.csv')
+# use station_locs.csv to include uncorrected stations
+stations = pd.read_csv(working_dir + '/station_counts.csv') 
 
 # df with station counts
 counts = pd.read_csv(working_dir + '/station_counts.csv')
@@ -48,7 +49,7 @@ for record in ev:
     count = count_list[index]
     
  
-    if count < 6: 
+    if count < 3: 
         ev.remove(record)
 
 
@@ -223,9 +224,9 @@ for f in range(F_bins):
 print(m1.shape)
 #now split m into an event matrix and a station matrix
 event = m1[0:I,:] #take first I rows
-station = m1[I:I+J,:]
+station = m1[I:I+J+1,:]
 event_cov = m_cov[0:I,:]
-station_cov = m_cov[I:I+J,:]
+station_cov = m_cov[I:I+J+1,:]
 print(event.shape, station.shape)
 print(event_cov.shape, station_cov.shape)
 
@@ -252,6 +253,8 @@ for i in range(I):#for each event
     # plt.plot(df[0],df[1])
     # plt.xscale('log')
     # plt.yscale('log')
+    # plt.xlabel('frequency (Hz)')
+    # plt.ylabel('spectra')
 
 for i in range(J):#for each station
     
@@ -269,10 +272,12 @@ for i in range(J):#for each station
     np.savetxt(outfile, out, fmt=['%E', '%E', '%E'], delimiter='\t')
     outfile.close()
     
-df = pd.DataFrame(out)
-plt.plot(df[0],df[1])
-plt.xscale('log')
-plt.yscale('log')
+    df = pd.DataFrame(out)
+    plt.plot(df[0],df[1])
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.xlabel('frequency (Hz)')
+    plt.ylabel('spectra')
     
 
 
