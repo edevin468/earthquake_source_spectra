@@ -15,6 +15,7 @@ import dread
 import time
 import random
 import pandas as pd
+import matplotlib.pyplot as plt
 
 #read in the cut and corrected spectra = records
 #records are in m/s
@@ -26,10 +27,32 @@ working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 outfile_path = working_dir + '/Andrews_inversion'
 
 # df with station locations
-stations = pd.read_csv(working_dir + '/station_locs.csv')
+stations = pd.read_csv(working_dir + '/station_counts.csv')
+
+# df with station counts
+counts = pd.read_csv(working_dir + '/station_counts.csv')
 
 #list of record files
 ev = glob.glob(working_dir + '/record_spectra/*/*')
+
+
+# discard all records from stations with less that 3 records
+for record in ev:
+    filename = (record.split('/')[-1])
+    base = path.basename(record)
+    stn = base.split('_')[1]
+    print(stn)
+    stns = list(counts['station'])
+    index = stns.index(stn)
+    count_list = counts['count']
+    count = count_list[index]
+    
+ 
+    if count < 6: 
+        ev.remove(record)
+
+
+
 
 record_path = ev
 print('Number of records: ', len(record_path))
@@ -206,43 +229,51 @@ station_cov = m_cov[I:I+J,:]
 print(event.shape, station.shape)
 print(event_cov.shape, station_cov.shape)
 
-# for i in range(I):#for each event
-#     print(i)
-#     print(eventidlist[i])
-#     print(outfile_path + '/' + eventidlist[i] + '.out')
-#     #go from the log of the power spectra to the regular spectra in m
-#     amp = np.sqrt(np.power(10.0, event[i,:]))
+for i in range(I):#for each event
+    print(i)
+    print(eventidlist[i])
+    print(outfile_path + '/' + eventidlist[i] + '.out')
+    #go from the log of the power spectra to the regular spectra in m
+    amp = np.sqrt(np.power(10.0, event[i,:]))
 
-#     std = (np.sqrt(np.abs(event_cov[i,:])/2.)*((amp)*(np.log(10))))
+    std = (np.sqrt(np.abs(event_cov[i,:])/2.)*((amp)*(np.log(10))))
     
-#     filename = outfile_path + '/' + eventidlist[i] + '.out'
-#     outfile = open(filename, 'w+')
+    filename = outfile_path + '/' + eventidlist[i] + '.out'
+    outfile = open(filename, 'w+')
     
-#     print(path.exists(filename))
+    print(path.exists(filename))
 
-#     out = (np.array([freq_list, amp, std])).T
-#     outfile.write('#freq_bins \t vel_spec_NE_m \t stdev_m \n')
-#     np.savetxt(outfile, out, fmt=['%E', '%E', '%E'], delimiter='\t')
-#     outfile.close()
+    out = (np.array([freq_list, amp, std])).T
+    outfile.write('#freq_bins \t vel_spec_NE_m \t stdev_m \n')
+    np.savetxt(outfile, out, fmt=['%E', '%E', '%E'], delimiter='\t')
+    outfile.close()
+    
+    # df = pd.DataFrame(out)
+    # plt.plot(df[0],df[1])
+    # plt.xscale('log')
+    # plt.yscale('log')
 
-
-print(outfile_path)
 for i in range(J):#for each station
-    # print(station)
-    srow = (station[i,:])
-    # print(min(srow),max(srow))
-    a = (10.0**srow)
-    print(min(a), max(a))
-
+    
+    print('*************************')
+    print(stn_list[i])
+   
     amp = np.sqrt(np.power(10.0, station[i,:]))
 
-    # std1 = np.sqrt((station_cov[i,:]))
-    # std = np.abs((std1/2.)*(amp)*(np.log(10)))
-    # outfile = open(outfile_path + '/' + stn_list[i] + '.out', 'w')
-    # out = (np.array([freq_list, amp, std])).T
-    # outfile.write('#freq_bins \t vel_spec_NE_m \t stdev_m \n')
-    # np.savetxt(outfile, out, fmt=['%E', '%E', '%E'], delimiter='\t')
-    # outfile.close()
+    std1 = np.sqrt((station_cov[i,:]))
+    std = np.abs((std1/2.)*(amp)*(np.log(10)))
+    outfile = open(outfile_path + '/' + stn_list[i] + '.out', 'w')
+    out = (np.array([freq_list, amp, std])).T
+ 
+    outfile.write('#freq_bins \t vel_spec_NE_m \t stdev_m \n')
+    np.savetxt(outfile, out, fmt=['%E', '%E', '%E'], delimiter='\t')
+    outfile.close()
     
+df = pd.DataFrame(out)
+plt.plot(df[0],df[1])
+plt.xscale('log')
+plt.yscale('log')
     
+
+
     
