@@ -223,11 +223,11 @@ df5['mean'] = means
 
 # lines for 1/r
 x = np.logspace(1,3,100)
-y = 1/x
+y = 1/5*1/x
 
     
 # plt.plot(x,y, c = 'grey', label = '~1/r')   
-plt.plot(x,y/5**1, c = 'grey') 
+plt.plot(x,y, c = 'grey') 
 # plt.plot(x,y/10**2, c = 'grey') 
 # plt.plot(x,y/10**3, c = 'grey') 
 # plt.plot(x,y/10**4, c = 'grey') 
@@ -251,9 +251,9 @@ plt.plot(x,y/5**1, c = 'grey')
 # these for means 
 
 plt.scatter(df1['dist'],df1['mean'], label='binned means all events')
-# plt.scatter(df2['dist'],df2['mean'], label='binned means all events')
-# plt.scatter(df3['dist'],df3['mean'], label='binned means all events')
-# plt.scatter(df4['dist'],df4['mean'], label='binned means all events')
+plt.scatter(df2['dist'],df2['mean'], label='binned means all events')
+plt.scatter(df3['dist'],df3['mean'], label='binned means all events')
+plt.scatter(df4['dist'],df4['mean'], label='binned means all events')
 
 
 

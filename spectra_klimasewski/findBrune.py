@@ -59,7 +59,7 @@ Brune_demean_list_log = []
  
 for i in range(len(event)):
     f = event_spectra_dir + event[i] + '.out'
-    print f
+    print(f)
     if f in event_spectra:
         ev_list.append(event[i])
         data = np.genfromtxt(f, dtype = float, comments = '#', delimiter = None, usecols = (0,1))#only read in first two cols
@@ -100,7 +100,7 @@ ind = sum_list.index(min(sum_list))
 print(ev_list[ind])
 print(min(sum_list))        
 
-print magl[ind]
+print(magl[ind])
 fig = plt.figure(figsize = (12,10))
 plt.ylabel('Velocity amplitude (m)', fontsize = 16)
 plt.xlim(0.5,70)

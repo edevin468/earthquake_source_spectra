@@ -16,6 +16,9 @@ import time
 import random
 import pandas as pd
 import matplotlib.pyplot as plt
+fig = plt.figure()
+fig.patch.set_facecolor('white')
+plt.style.use('classic')
 
 #read in the cut and corrected spectra = records
 #records are in m/s
@@ -36,14 +39,18 @@ counts = pd.read_csv(working_dir + '/station_counts.csv')
 #list of record files
 ev = glob.glob(working_dir + '/record_spectra/*/*')
 
+stn_id_list = []
 
 # discard all records from stations with less that 3 records
 for record in ev:
     filename = (record.split('/')[-1])
     base = path.basename(record)
     stn = base.split('_')[1]
-    print(stn)
+    ntwk = base.split('_')[0]
+    
     stns = list(counts['station'])
+    ntwks = counts['network']
+    
     index = stns.index(stn)
     count_list = counts['count']
     count = count_list[index]
@@ -51,10 +58,12 @@ for record in ev:
  
     if count < 3: 
         ev.remove(record)
-
-
-
-
+        
+    if count >= 3:
+       stn_id = ntwk+stn
+       if stn_id not in stn_id_list:
+           stn_id_list.append(stn_id)
+        
 record_path = ev
 print('Number of records: ', len(record_path))
    
@@ -143,6 +152,9 @@ rows = len(record_path) #testing first 10
 print(rows)
 
 index_matrix = [[0 for j in range(3)] for i in range(rows)]
+stn_index_list = []
+
+stn_test_list = []
 
 for i in range(len(record_path)):
 # for i in range(rows):
@@ -161,18 +173,26 @@ for i in range(len(record_path)):
     print(network, station)
     print(eventid)
     
-    
+    stn_index = stn_list.index(stnid)
+    if stn_index not in stn_index_list:
+        stn_index_list.append(stn_index)
+        
+    if stnid not in stn_test_list:   
+        stn_test_list.append(stnid)
+
     
     #make a tuple of record, event, station so indices can be assigned
-    index_matrix[i] = [base, eventidlist.index(eventid), stn_list.index(stnid)]
+    index_matrix[i] = [base, eventidlist.index(eventid), stn_id_list.index(stnid)]
 
-print(eventidlist[0])
-print(stn_list)
+# print(eventidlist[0])
+# print(stn_list)
 
 I = len(eventidlist)#events
-J = len(stn_list)#stations
+J = len(stn_id_list)#stations
 K = len(record_path)#records
 K = rows
+
+
 
 print('Number of events: ', I, ' Number of stations: ', J)
 print('Number of rows (records): ', K, ' Number of cols (events+stations): ', I+J)
@@ -183,6 +203,10 @@ G2 = np.zeros((K,J))
 
 
 for k in range(K):#for all records
+    print(k)
+    print(index_matrix[k][1])
+    print(index_matrix[k][2])
+    
     G1[k][index_matrix[k][1]] = 1 #record row, eventid col
     G2[k][index_matrix[k][2]] = 1 #record row, station col
 
@@ -211,7 +235,7 @@ for f in range(F_bins):
     d = R[:,f]#record for given frequency col
     dT = d.T
     print('inverting for frequency: ', f, freq_list[f])
-    G_inv = np.linalg.pinv(G, rcond=1e-13)
+    G_inv = np.linalg.pinv(G)
     covd = np.diag(cov[:,f])
 
     covm = np.dot((np.dot(G_inv, covd)), G_inv.T)
@@ -245,6 +269,7 @@ for i in range(I):#for each event
     print(path.exists(filename))
 
     out = (np.array([freq_list, amp, std])).T
+    
     outfile.write('#freq_bins \t vel_spec_NE_m \t stdev_m \n')
     np.savetxt(outfile, out, fmt=['%E', '%E', '%E'], delimiter='\t')
     outfile.close()
@@ -255,10 +280,16 @@ for i in range(I):#for each event
     # plt.yscale('log')
     # plt.xlabel('frequency (Hz)')
     # plt.ylabel('spectra')
+    
+    
 
+fig = plt.figure()
+fig.patch.set_facecolor('white')
+plt.style.use('classic')
+print('*************************')
 for i in range(J):#for each station
     
-    print('*************************')
+    
     print(stn_list[i])
    
     amp = np.sqrt(np.power(10.0, station[i,:]))
@@ -273,11 +304,13 @@ for i in range(J):#for each station
     outfile.close()
     
     df = pd.DataFrame(out)
+    
     plt.plot(df[0],df[1])
     plt.xscale('log')
     plt.yscale('log')
     plt.xlabel('frequency (Hz)')
     plt.ylabel('spectra')
+    plt.xlim(10**-3,10**2)
     
 
 

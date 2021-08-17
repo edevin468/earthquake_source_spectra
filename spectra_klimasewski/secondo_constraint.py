@@ -62,3 +62,4 @@ for i in range(len(secondo_stn)):#for each station
     np.savetxt(outfile, out, fmt=['%E', '%E', '%E'], delimiter='\t')
 
     outfile.close()
+    
