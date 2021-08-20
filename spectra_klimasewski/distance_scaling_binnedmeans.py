@@ -15,7 +15,9 @@ import pandas as pd
 from scipy import stats
 import matplotlib.pyplot as plt
 
-
+fig = plt.figure(figsize=(6,4))
+plt.style.use('classic')
+fig.patch.set_facecolor('white')
 
 #read in the cut and corrected spectra = records
 #records are in m/s
@@ -53,6 +55,7 @@ f2 = 0.1
 f3 = 1.0
 f4 = 10
 distlist = []
+maglist = []
 
 
 for record in record_list: 
@@ -76,6 +79,7 @@ for record in record_list:
     evlat = float(phase[4])
     evlon = float(phase[5])
     evdepth = float(phase[6])
+    mag = int(float(phase[7]))
     
     # assign station corrdinates and depth
     stlat = stn_lat[stn_list.index(stn_id)]
@@ -94,13 +98,27 @@ for record in record_list:
     amp3.append(data[52,1])
     amp4.append(data[74,1])
     
+    maglist.append(mag)
     
+# create list of colors
+colors = []
+for mag in maglist:
+    if mag == 1:   colors.append('r')  
+    elif mag == 2:  colors.append('b')  
+    elif mag == 3:  colors.append('g')  
+    elif mag == 4:  colors.append('k')  
+    elif mag == 5:  colors.append('orange')  
+    elif mag == 6:  colors.append('cyan')  
+    elif mag == 7:  colors.append('m')  
+    elif mag == 8:  colors.append('purple')  
+    elif mag == 9:  colors.append('grey')  
   
 df['record'] = record_list
 df['amp:f1'] = amp1
 df['amp:f2'] = amp2
 df['amp:f3'] = amp3
 df['amp:f4'] = amp4
+df['mag'] = maglist
 
 df['dist'] = distlist
 
@@ -122,21 +140,32 @@ bin_means4, bin_edges4, binnumber4 = stats.binned_statistic(df['dist'], df['amp:
 bin_width4 = (bin_edges4[1] - bin_edges4[0])
 bin_centers4 = bin_edges4[1:] - bin_width4/2
 
-plt.scatter(distlist,amp4, edgecolors = 'grey', facecolors = 'none', label = 'data')
-plt.scatter(bin_centers4,bin_means4, label = 'binned means')
 
+
+plt.scatter(distlist,amp3, c = colors, marker = '+',s = 30)
+plt.scatter(bin_centers3,bin_means3, edgecolors = 'k', facecolors = 'darkgrey',s=50,label = 'binned means')
+
+plt.scatter(10,10**-11, marker = '+', c = 'r', label='M1')
+plt.scatter(10,10**-11, marker = '+', c = 'b', label='M2')
+plt.scatter(10,10**-11, marker = '+', c = 'g', label='M3')
+plt.scatter(10,10**-11, marker = '+', c = 'k', label='M4')
+plt.scatter(10,10**-11, marker = '+', c = 'orange', label='M5')
+plt.scatter(10,10**-11, marker = '+', c = 'c', label='M6')
+plt.scatter(10,10**-11, marker = '+', c = 'm', label='M7')
+plt.scatter(10,10**-11, marker = '+', c = 'purple', label='M8')
+plt.scatter(10,10**-11, marker = '+', c = 'grey', label='M9')
 
 x = np.logspace(1,3,100)
-y = 1/16000*1/x
+y = 1/100*1/x
 plt.plot(x,y, c = 'k',label = '~1/r')
 
 plt.xscale('log')
 plt.yscale('log')
 plt.xlim(6,11**2)
-plt.ylim(10**-10, 10**-4)
+plt.ylim(10**-8, 10**-1)
 plt.xlabel('distance (km)')
 plt.ylabel('amplitude')
-plt.title('f = '+str(f4)+' Hz')
+plt.title('f = '+str(f3)+' Hz')
 leg = plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), facecolor = 'w', ncol = 2, fontsize = 10)
 
   

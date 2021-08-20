@@ -17,17 +17,17 @@ import obspy
 import matplotlib.pyplot as plt
 
 #magnitude range for inversion constraint
-mag_ub = 3.5#2.77
-mag_lb = 3.0#2.75
+mag_ub = 1#2.77
+mag_lb = 8#2.75
 #properties for unit
 beta = 3500. #3500m/s
 stressdrop = 5e6 #pascals
 U = 0.63#0.63
 rho = 2750. #kg/m^3
 
-working_dir =  '/Users/aklimase/Desktop/USGS/project/'
-event_spectra_dir = working_dir + '/test_codes/Andrews_inversion/'
-event_spectra = glob.glob(event_spectra_dir + '[2]*.out')
+working_dir =  '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+event_spectra_dir = working_dir + '/Andrews_inversion/'
+event_spectra = glob.glob(event_spectra_dir + '3*.out')
 
 writefile = 'yes'
 
@@ -36,6 +36,7 @@ catalog = working_dir + '/catalogs/all_paths_M2.5_USGS_Catalog.txt'
 cat = np.genfromtxt(catalog, comments = '#', delimiter = '|', dtype = None, usecols = [1,10], encoding = None)
 event = []
 magl = []
+
 for i in range(len(cat)):
     m = cat[i][1]
     if m >= mag_lb and m <= mag_ub:
