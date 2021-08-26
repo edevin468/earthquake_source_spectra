@@ -62,7 +62,7 @@ for event in event_list:
     mag = float(phase[7])
     
     m_l = 1
-    m_u = 8
+    m_u = 3
     
     if mag <= m_u and mag >= m_l:
         keep = True
@@ -114,8 +114,8 @@ for event in event_spectra:
     Brune = (2.*np.pi*(freq)*omega0)/(1.+((1./fc)*freq)**2.)
     
     #stay in meters
-    shift1 = np.mean(Brune[0:74])
-    shift2 = np.mean(spec[0:74])
+    shift1 = np.mean(Brune[27:74])
+    shift2 = np.mean(spec[27:74])
     
     cf_list.append(np.log10(spec/shift2)-np.log10(Brune/shift1))
 
@@ -128,7 +128,7 @@ for event in event_spectra:
 cfarray = np.array(cf_list)
 
 # ind = cfarray.index(0.5)
-sum_list =list(map(sum,cfarray[:,np.arange(0,74)]**2.0)) # found the best fit from 1-32.7Hz
+sum_list =list(map(sum,cfarray[:,np.arange(27,74)]**2.0)) # found the best fit from 1-32.7Hz
 
 # find the minimum in log space
 ind = sum_list.index(min(sum_list))
