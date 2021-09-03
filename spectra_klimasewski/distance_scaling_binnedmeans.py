@@ -140,6 +140,36 @@ bin_means4, bin_edges4, binnumber4 = stats.binned_statistic(df['dist'], df['amp:
 bin_width4 = (bin_edges4[1] - bin_edges4[0])
 bin_centers4 = bin_edges4[1:] - bin_width4/2
 
+plt.subplot(121)
+
+
+plt.scatter(distlist,amp1, c = colors, marker = '+',s = 30)
+plt.scatter(bin_centers1,bin_means1, edgecolors = 'k', facecolors = 'darkgrey',s=50,label = 'binned means')
+
+plt.scatter(10,10**-11, marker = '+', c = 'r', label='M1')
+plt.scatter(10,10**-11, marker = '+', c = 'b', label='M2')
+plt.scatter(10,10**-11, marker = '+', c = 'g', label='M3')
+plt.scatter(10,10**-11, marker = '+', c = 'k', label='M4')
+plt.scatter(10,10**-11, marker = '+', c = 'orange', label='M5')
+plt.scatter(10,10**-11, marker = '+', c = 'c', label='M6')
+plt.scatter(10,10**-11, marker = '+', c = 'm', label='M7')
+plt.scatter(10,10**-11, marker = '+', c = 'purple', label='M8')
+plt.scatter(10,10**-11, marker = '+', c = 'grey', label='M9')
+
+x = np.logspace(1,3,100)
+y = 1/10*1/x
+plt.plot(x,y, c = 'k',label = '~1/r')
+
+plt.xscale('log')
+plt.yscale('log')
+plt.xlim(6,11**2)
+plt.ylim(10**-8, 10**-1)
+plt.xlabel('distance (km)')
+plt.ylabel('amplitude')
+plt.title('(a) f = '+str(f1)+' Hz', loc= 'left', fontsize= 12)
+leg = plt.legend(loc='upper center', bbox_to_anchor=(1.1, -0.15), facecolor = 'w', ncol = 4, fontsize = 10)
+
+plt.subplot(122)
 
 
 plt.scatter(distlist,amp3, c = colors, marker = '+',s = 30)
@@ -164,8 +194,10 @@ plt.yscale('log')
 plt.xlim(6,11**2)
 plt.ylim(10**-8, 10**-1)
 plt.xlabel('distance (km)')
-plt.ylabel('amplitude')
-plt.title('f = '+str(f3)+' Hz')
-leg = plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), facecolor = 'w', ncol = 2, fontsize = 10)
+plt.yticks([])
 
-  
+plt.title('(b) f = '+str(f3)+' Hz', loc= 'left', fontsize= 12)
+# leg = plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), facecolor = 'w', ncol = 2, fontsize = 10)
+
+plt.savefig('/Users/emmadevin/Work/USGS 2021/Figures/SCEC/attenuation.pdf', bbox_inches='tight')
+

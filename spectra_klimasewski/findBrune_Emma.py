@@ -17,14 +17,11 @@ import obspy
 import matplotlib.pyplot as plt
 import pandas as pd
 
-#magnitude range for inversion constraint
-mag_ub = 1#2.77
-mag_lb = 8#2.75
 #properties for unit
 beta = 3500. #3500m/s
-stressdrop = 5e6 #pascals
-U = 0.63#0.63
-rho = 2750. #kg/m^3
+stressdrop = 5e3 #5e6 pascals
+U = 0.38#0.63
+rho = 2750. #2750kg/m^3
 
 working_dir =  '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 event_spectra_dir = working_dir + '/Andrews_inversion/'
@@ -61,8 +58,8 @@ for event in event_list:
     
     mag = float(phase[7])
     
-    m_l = 1
-    m_u = 3
+    m_l = 0
+    m_u = 10
     
     if mag <= m_u and mag >= m_l:
         keep = True
