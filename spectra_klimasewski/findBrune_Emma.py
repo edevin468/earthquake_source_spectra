@@ -18,14 +18,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 #properties for unit
-beta = 3500. #3500m/s
-stressdrop = 5e3 #5e6 pascals
-U = 0.38#0.63
+beta = 2000. #3500m/s
+stressdrop = 1e3 #5e6 pascals
+U = 0.63#0.63
 rho = 2750. #2750kg/m^3
 
 working_dir =  '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
-event_spectra_dir = working_dir + '/Andrews_inversion/'
-event_list = glob.glob(event_spectra_dir + '3*.out')
+event_spectra_dir = working_dir + '/Andrews_inversion/Events/'
+event_list = glob.glob(event_spectra_dir + '*.out')
 
 writefile = 'yes'
 
@@ -58,8 +58,8 @@ for event in event_list:
     
     mag = float(phase[7])
     
-    m_l = 0
-    m_u = 10
+    m_l = 1
+    m_u = 3
     
     if mag <= m_u and mag >= m_l:
         keep = True
@@ -110,13 +110,21 @@ for event in event_spectra:
     #brune spectra over all frequencies
     Brune = (2.*np.pi*(freq)*omega0)/(1.+((1./fc)*freq)**2.)
     
-    #stay in meters
-    shift1 = np.mean(Brune[27:74])
-    shift2 = np.mean(spec[27:74])
+    avg_spec = np.mean(spec)
+    avg_brune = np.mean(Brune)
     
-    cf_list.append(np.log10(spec/shift2)-np.log10(Brune/shift1))
+    diff = avg_spec - avg_brune
+    
+    shifted_brune = Brune + diff
+    
+    
+    # #stay in meters
+    # shift1 = np.mean(Brune[0:74])
+    # shift2 = np.mean(spec[0:74])
+    
+    # cf_list.append(np.log10(spec/shift2)-np.log10(Brune/shift1))
 
-    Brune_list.append(Brune)
+    Brune_list.append(shifted_brune)
     spec_list.append(spec)
     
 
@@ -125,7 +133,7 @@ for event in event_spectra:
 cfarray = np.array(cf_list)
 
 # ind = cfarray.index(0.5)
-sum_list =list(map(sum,cfarray[:,np.arange(27,74)]**2.0)) # found the best fit from 1-32.7Hz
+sum_list =list(map(sum,cfarray[:,np.arange(0,74)]**2.0)) # found the best fit from 1-32.7Hz
 
 # find the minimum in log space
 ind = sum_list.index(min(sum_list))
@@ -139,7 +147,7 @@ fig.patch.set_facecolor('white')
 
 
 plt.ylabel('Velocity amplitude (m)', fontsize = 16)
-plt.xlim(0.5,70)
+plt.xlim(0.5,10)
 plt.loglog(freq , spec_list[ind], color = 'green', label = 'event spectra')
 plt.grid()
 plt.loglog(freq, Brune_list[ind], color = 'blue', label = 'Brune spectra')

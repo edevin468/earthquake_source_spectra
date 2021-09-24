@@ -35,8 +35,7 @@ working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 event_dirs = glob.glob(working_dir + '/corrected/*')
 outpath = working_dir + '/record_spectra'
 
-#sampling rate
-delta = 0.05
+
 
 ##make event directories within corrected local data
 ##make a directory for each event
@@ -72,6 +71,8 @@ for event in events:
             stream = read(recordpath_N[0])
             tr = stream[0]
             data = tr.data
+            delta = 1/tr.stats.sampling_rate
+            print(delta)
             
             spec_amp, freq , jack, fstat, dof =  mtspec(data, delta = delta, time_bandwidth = 4, number_of_tapers=7, quadratic = True, statistics = True)
             

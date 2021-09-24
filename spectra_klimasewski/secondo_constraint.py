@@ -19,22 +19,29 @@ all in m/s
 import numpy as np
 import glob
 import os.path as path
+import matplotlib.pyplot as plt
 
-working_dir = '/Users/aklimase/Desktop/USGS/project/test_codes'
+
+working_dir =  '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 
 #fill in constraint event
-secondo_dir = 'Andrews_inversion'
+secondo_dir = '/constraint'
 #fill in constraint event name here
-constraint ='2010_01_20_11_51_46'
-constraint_file =  working_dir + '/constraint_' + constraint + '.out'
+constraint ='38548295'
+constraint_file =  working_dir + secondo_dir + '/constraint_' + constraint + '.out'
 outfile_path = working_dir + '/Andrews_inversion_constrained'
 
 con = np.genfromtxt(constraint_file)
 cf_spec = con.T[1] #second col
 print(cf_spec)
-secondo_ev =  glob.glob(working_dir + '/' + secondo_dir + '/2*.out')
-secondo_stn = glob.glob(working_dir + '/'+ secondo_dir + '/[!2]*.out')
+secondo_ev =  glob.glob(working_dir + '/' + 'Events' + '/*.out')
+secondo_stn = glob.glob(working_dir + '/'+ 'Stations' + '/*.out')
 freq_list = con.T[0] 
+
+
+plt.plot(con.T[0], con.T[1])
+plt.xscale('log')
+plt.yscale('log')
 
 ##not in log space anymore
 for i in range(len(secondo_ev)):#for each event

@@ -15,7 +15,7 @@ import pandas as pd
 from scipy import stats
 import matplotlib.pyplot as plt
 
-fig = plt.figure(figsize=(6,4))
+fig, (ax1,ax2) = plt.subplots(1, 2, gridspec_kw={'width_ratios': [3.3,4]},figsize=(7,4))
 plt.style.use('classic')
 fig.patch.set_facecolor('white')
 
@@ -100,6 +100,7 @@ for record in record_list:
     
     maglist.append(mag)
     
+sizes = np.array(maglist)*10
 # create list of colors
 colors = []
 for mag in maglist:
@@ -140,63 +141,79 @@ bin_means4, bin_edges4, binnumber4 = stats.binned_statistic(df['dist'], df['amp:
 bin_width4 = (bin_edges4[1] - bin_edges4[0])
 bin_centers4 = bin_edges4[1:] - bin_width4/2
 
-plt.subplot(121)
 
 
-plt.scatter(distlist,amp1, c = colors, marker = '+',s = 30)
-plt.scatter(bin_centers1,bin_means1, edgecolors = 'k', facecolors = 'darkgrey',s=50,label = 'binned means')
-
-plt.scatter(10,10**-11, marker = '+', c = 'r', label='M1')
-plt.scatter(10,10**-11, marker = '+', c = 'b', label='M2')
-plt.scatter(10,10**-11, marker = '+', c = 'g', label='M3')
-plt.scatter(10,10**-11, marker = '+', c = 'k', label='M4')
-plt.scatter(10,10**-11, marker = '+', c = 'orange', label='M5')
-plt.scatter(10,10**-11, marker = '+', c = 'c', label='M6')
-plt.scatter(10,10**-11, marker = '+', c = 'm', label='M7')
-plt.scatter(10,10**-11, marker = '+', c = 'purple', label='M8')
-plt.scatter(10,10**-11, marker = '+', c = 'grey', label='M9')
-
-x = np.logspace(1,3,100)
-y = 1/10*1/x
-plt.plot(x,y, c = 'k',label = '~1/r')
-
-plt.xscale('log')
-plt.yscale('log')
-plt.xlim(6,11**2)
-plt.ylim(10**-8, 10**-1)
-plt.xlabel('distance (km)')
-plt.ylabel('amplitude')
-plt.title('(a) f = '+str(f1)+' Hz', loc= 'left', fontsize= 12)
-leg = plt.legend(loc='upper center', bbox_to_anchor=(1.1, -0.15), facecolor = 'w', ncol = 4, fontsize = 10)
-
-plt.subplot(122)
+ax1.scatter(distlist,amp2, c = maglist,edgecolors='none', cmap = 'winter',alpha = 0.6, marker = 'o',s = sizes)
+# plt.scatter(bin_centers1,bin_means1, edgecolors = 'k', facecolors = 'darkgrey',s=50,label = 'binned means')
 
 
-plt.scatter(distlist,amp3, c = colors, marker = '+',s = 30)
-plt.scatter(bin_centers3,bin_means3, edgecolors = 'k', facecolors = 'darkgrey',s=50,label = 'binned means')
+x = np.logspace(0.1,3,100)
+y1 = 1/10*1/x
+y2 = 1/100*1/x
+y3 = 1/1000*1/x
+y4 = 1/10000*1/x
+y5 = 1/100000*1/x
+y6 = 1/1000000*1/x
+y7 = 1/10000000*1/x
 
-plt.scatter(10,10**-11, marker = '+', c = 'r', label='M1')
-plt.scatter(10,10**-11, marker = '+', c = 'b', label='M2')
-plt.scatter(10,10**-11, marker = '+', c = 'g', label='M3')
-plt.scatter(10,10**-11, marker = '+', c = 'k', label='M4')
-plt.scatter(10,10**-11, marker = '+', c = 'orange', label='M5')
-plt.scatter(10,10**-11, marker = '+', c = 'c', label='M6')
-plt.scatter(10,10**-11, marker = '+', c = 'm', label='M7')
-plt.scatter(10,10**-11, marker = '+', c = 'purple', label='M8')
-plt.scatter(10,10**-11, marker = '+', c = 'grey', label='M9')
 
-x = np.logspace(1,3,100)
-y = 1/100*1/x
-plt.plot(x,y, c = 'k',label = '~1/r')
+ax1.plot(x,y1,ls ='--', c = 'k',label = '~1/r')
+ax1.plot(x,y2,ls ='--', c = 'k')
+ax1.plot(x,y3,ls ='--', c = 'k')
+ax1.plot(x,y4,ls ='--', c = 'k')
+ax1.plot(x,y5, ls ='--',c = 'k')
+ax1.plot(x,y6, ls ='--',c = 'k')
+# ax1.plot(x,y7, c = 'k')
+ax1.legend(fontsize = 10, loc='lower left')
 
-plt.xscale('log')
-plt.yscale('log')
-plt.xlim(6,11**2)
-plt.ylim(10**-8, 10**-1)
-plt.xlabel('distance (km)')
-plt.yticks([])
+ax1.set_xscale('log')
+ax1.set_yscale('log')
+ax1.set_xlim(6,11**2)
+ax1.set_ylim(5*10**-9, 5*10**-2)
+ax1.set_xlabel('distance (km)')
+ax1.set_ylabel('amplitude')
+ax1.set_title('(a) f = '+str(f2)+' Hz', loc= 'left', fontsize= 12)
 
-plt.title('(b) f = '+str(f3)+' Hz', loc= 'left', fontsize= 12)
+# leg = plt.legend(loc='upper center', bbox_to_anchor=(1.1, -0.2), facecolor = 'w', ncol = 4, fontsize = 10)
+
+
+
+im = ax2.scatter(distlist,amp3, c = maglist,edgecolors='none', cmap = 'winter',alpha = 0.6, marker = 'o',s = sizes)
+# plt.scatter(bin_centers3,bin_means3, edgecolors = 'k', facecolors = 'darkgrey',s=50,label = 'binned means')
+
+x = np.logspace(0.1,3,100)
+y1 = 1/10*1/x
+y2 = 1/100*1/x
+y3 = 1/1000*1/x
+y4 = 1/10000*1/x
+y5 = 1/100000*1/x
+y6 = 1/1000000*1/x
+y7 = 1/10000000*1/x
+
+
+# ax2.plot(x,y1, c = 'k',label = '~1/r' )
+ax2.plot(x,y2,ls ='--', c = 'k',label = '~1/r')
+ax2.plot(x,y3, ls ='--',c = 'k')
+ax2.plot(x,y4, ls ='--',c = 'k')
+ax2.plot(x,y5,ls ='--', c = 'k')
+ax2.plot(x,y6, ls ='--',c = 'k')
+# ax2.plot(x,y7, c = 'k')
+ax2.legend(fontsize = 10, loc='lower left')
+
+ax2.set_xscale('log')
+ax2.set_yscale('log')
+ax2.set_xlim(6,11**2)
+ax2.set_ylim(10**-9, 10**-2)
+ax2.set_xlabel('distance (km)')
+# ax2.set_yticks([])
+cbar = fig.colorbar(im)
+
+cbar.set_label('magnitude', rotation=270, labelpad=20)
+
+ax2.set_title('(b) f = '+str(f3)+' Hz', loc= 'left', fontsize= 12)
+
+
+
 # leg = plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), facecolor = 'w', ncol = 2, fontsize = 10)
 
 plt.savefig('/Users/emmadevin/Work/USGS 2021/Figures/SCEC/attenuation.pdf', bbox_inches='tight')
