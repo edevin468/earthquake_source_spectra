@@ -35,6 +35,7 @@ writefile = 'yes'
 cf_list = []
 cf2_list = []
 Brune_list = []
+Brune_list_untrimmed = []
 spec_list = []
 ev_list = []
 mag_list = []
@@ -62,7 +63,7 @@ for event in event_list:
     mag = float(phase[7])
     
     m_l = 1
-    m_u = 6
+    m_u = 10
     
     if mag <= m_u and mag >= m_l:
         keep = True
@@ -96,7 +97,7 @@ for event in event_spectra:
     freq_untrimmed = np.array(data[:,0])
     spec_untrimmed = np.array(data[:,1])  # these record spectra are in m
 
-
+    
     # if less than 3, convert local magnitude to moment magnitude
     if mag < 3.0:
         M = 0.884 + 0.754*mag  # 0.884 + 0.667*ml, 754
@@ -130,6 +131,7 @@ for event in event_spectra:
 
 
     Brune_list.append(Brune)
+    Brune_list_untrimmed.append(Brune_untrimmed)
     spec_list.append(spec)
     freq_list.append(freq)
     
@@ -242,11 +244,18 @@ plt.show()
 
 
 
-#write the constraint file in linear space to agree with the event and station spectra
-if writefile == 'yes':
-    outfile = open(working_dir + '/constraint/constraint_' + id_list[ind] + '.out', 'w')
-    out = np.array([freq_untrimmed_list[ind],10.**(cf_list[ind])]).T
-    outfile.write('#freq_bins \t cf_m \n')
+# #write the constraint file in linear space to agree with the event and station spectra
+# if writefile == 'yes':
+#     outfile = open(working_dir + '/constraint/constraint_' + id_list[ind] + '.out', 'w')
+#     out = np.array([freq_untrimmed_list[ind],10.**(cf_list[ind])]).T
+#     outfile.write('#freq_bins \t cf_m \n')
+#     np.savetxt(outfile, out, fmt='%E', delimiter='\t')
+#     outfile.close()
+    
+for ind in range(len(Brune_list_untrimmed)):
+    outfile = open(working_dir + '/Brune_spectra/' + id_list[ind] + '.out', 'w')
+    out = np.array([freq_untrimmed_list[ind],Brune_list_untrimmed[ind]]).T
+    outfile.write('#freq_bins \t brune \n')
     np.savetxt(outfile, out, fmt='%E', delimiter='\t')
     outfile.close()
 

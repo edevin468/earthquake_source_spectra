@@ -29,19 +29,38 @@ secondo_dir = '/constraint'
 #fill in constraint event name here
 constraint ='38548295'
 constraint_file =  working_dir + secondo_dir + '/constraint_' + constraint + '.out'
+brune_file = working_dir + '/Brune_spectra/' + constraint + '.out'
 outfile_path = working_dir + '/Andrews_inversion_constrained'
 
 con = np.genfromtxt(constraint_file)
-cf_spec = con.T[1] #second col
-print(cf_spec)
-secondo_ev =  glob.glob(working_dir + '/' + 'Events' + '/*.out')
-secondo_stn = glob.glob(working_dir + '/'+ 'Stations' + '/*.out')
-freq_list = con.T[0] 
+cf_spec = con.T[1] 
+freq_list = con.T[0]
+
+brun = np.genfromtxt(brune_file)
+brune_spec = brun.T[1]
+
+ev_file = working_dir + '/Andrews_inversion/Events' + '/38548295.out'
+ev = np.genfromtxt(ev_file)
 
 
-plt.plot(con.T[0], con.T[1])
+
+fig = plt.figure(figsize = (8,6))
+plt.style.use('classic')
+fig.patch.set_facecolor('white')
+plt.plot(con.T[0], con.T[1], label = 'contsraint function')
+plt.plot(ev.T[0],ev.T[1], label = 'constraint event spectra')
+plt.plot(brun.T[0],brun.T[1], label = 'constraint event brune spectra')
+plt.plot(ev.T[0], ev.T[1]/con.T[1], label = 'constraint applied to constraint event')
 plt.xscale('log')
 plt.yscale('log')
+plt.xlabel('frequency')
+plt.ylabel('velocity amplitude (m)')
+plt.legend(loc= 'lower left')
+plt.grid()
+
+
+secondo_ev =  glob.glob(working_dir + '/Andrews_inversion/Events' + '/*.out')
+secondo_stn = glob.glob(working_dir + '/Andrews_inversion/Stations' + '/*.out')
 
 ##not in log space anymore
 for i in range(len(secondo_ev)):#for each event
@@ -50,10 +69,14 @@ for i in range(len(secondo_ev)):#for each event
     eventid = path.basename(secondo_ev[i]).split('.')[0]
     amp = event.T[1]/cf_spec
     std = event.T[2]/cf_spec
+    
+    if len(amp) == 0: 
+        print('no data event ' + eventid)
+
     outfile = open(outfile_path + '/' + eventid + '.out', 'w')
     out = (np.array([freq_list, amp, std])).T
     outfile.write('#freq_bins \t vel_spec_NE_m \t stdev_m \n')
-
+    np.savetxt(outfile, out, fmt=['%E', '%E', '%E'], delimiter='\t')
     outfile.close()
     
     
@@ -63,6 +86,8 @@ for i in range(len(secondo_stn)):#for each station
     stnid = path.basename(secondo_stn[i]).split('.')[0]
     amp = stn.T[1]*cf_spec
     std = stn.T[2]*cf_spec
+    
+    
     outfile = open(outfile_path + '/' + stnid + '.out', 'w')
     out = (np.array([freq_list, amp, std])).T
     outfile.write('#freq_bins \t vel_spec_NE_m \t stdev_m \n')

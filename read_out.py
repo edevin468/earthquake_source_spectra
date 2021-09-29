@@ -9,17 +9,23 @@ Created on Fri Jul  2 11:11:43 2021
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import glob
 
-path = '/Users/emmadevin/Work/USGS 2021/Data/Prelim/record_spectra/38548295/CI_AVM_HHNE__38548295.out'
 
-data = np.genfromtxt(path, dtype = float, comments = '#', delimiter = None, usecols = (0,1,2)) #only read in first two cols
-df = pd.DataFrame(data)
+path = glob.glob('/Users/emmadevin/Work/USGS 2021/Data/Prelim/Andrews_inversion_constrained/*.out')
 
-freq = df[0]
-spectra = df[1]
+for i in range(len(path)):
+    data = np.genfromtxt(path[i], dtype = float, comments = '#', delimiter = None, usecols = (0,1,2)) #only read in first two cols
 
-plt.plot(freq, spectra)
-plt.xscale('log')
-plt.yscale('log')
-plt.xlabel('frequency (Hz)')
-plt.ylabel('amplitude')
+    freq = data.T[0]
+    spectra = data.T[1]
+    
+    fig = plt.figure(figsize = (8,6))
+    plt.style.use('classic')
+    fig.patch.set_facecolor('white')
+    plt.plot(freq, spectra)
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.xlabel('frequency (Hz)')
+    plt.ylabel('amplitude')
+    
