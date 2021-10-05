@@ -48,7 +48,7 @@ def calc_site_tstar(f1,f2):
     
     site = np.zeros((I, J))
 
-    print 'number of sites: ', I
+    print('number of sites: ', I)
     tstar = []
     A = []
     L2norm = []
