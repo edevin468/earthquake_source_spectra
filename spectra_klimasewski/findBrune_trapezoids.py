@@ -63,7 +63,7 @@ for event in event_list:
     mag = float(phase[7])
     
     m_l = 1
-    m_u = 10
+    m_u = 5
     
     if mag <= m_u and mag >= m_l:
         keep = True
@@ -139,7 +139,8 @@ for event in event_spectra:
     shift1 = np.mean(Brune[0:74])
     shift2 = np.mean(spec[0:74])
     
-    cf_list.append(np.log10(spec_untrimmed/shift2)-np.log10(Brune_untrimmed/shift1))
+    # cf_list.append(np.log10(spec_untrimmed/shift2)-np.log10(Brune_untrimmed/shift1))
+    cf_list.append(np.log10(spec_untrimmed)-np.log10(Brune_untrimmed))
     
 cfarray = np.array(cf_list)
     
@@ -187,28 +188,28 @@ for i in range(len(spec_list)):
         
     areas.append(area)
     
-    print('_____________________')
-    print('M',mag_list[i])
-    print(area)
-    print(np.mean(brune))
-    print(np.mean(spectra))
+    # print('_____________________')
+    # print('M',mag_list[i])
+    # print(area)
+    # print(np.mean(brune))
+    # print(np.mean(spectra))
     
     
-    # fig = plt.figure(figsize = (8,6))
-    # plt.style.use('classic')
-    # fig.patch.set_facecolor('white')
+    fig = plt.figure(figsize = (8,6))
+    plt.style.use('classic')
+    fig.patch.set_facecolor('white')
     
-    # plt.ylabel('velocity amplitude (m)', fontsize = 12)
-    # # plt.xlim(0.01,100)
-    # plt.loglog(freq , spectra, color = 'green', label = 'event spectra')
-    # plt.grid()
-    # plt.loglog(freq, brune, color = 'blue', label = 'Brune spectra')
-    # plt.legend(loc = 'lower left', fontsize = 12)
-    # plt.xlabel('frequency (Hz)', fontsize = 12)
-    # # plt.title('event ID: 38475431 \nmagnitude : 4.15)
-    # plt.title('event id:'+id_list[i]+', magnitude: M'+str(mag_list[i]), fontsize = 12, loc='left')
-    # plt.tick_params(axis='both', which='major', labelsize=12)
-    # plt.tick_params(axis='both', which='both', length = 5, width = 1)
+    plt.ylabel('velocity amplitude (m)', fontsize = 12)
+    # plt.xlim(0.01,100)
+    plt.loglog(freq , spectra, color = 'green', label = 'event spectra')
+    plt.grid()
+    plt.loglog(freq, brune, color = 'blue', label = 'Brune spectra')
+    plt.legend(loc = 'lower left', fontsize = 12)
+    plt.xlabel('frequency (Hz)', fontsize = 12)
+    # plt.title('event ID: 38475431 \nmagnitude : 4.15)
+    plt.title('event id:'+id_list[i]+', magnitude: M'+str(mag_list[i]), fontsize = 12, loc='left')
+    plt.tick_params(axis='both', which='major', labelsize=12)
+    plt.tick_params(axis='both', which='both', length = 5, width = 1)
     
     
 
@@ -226,36 +227,36 @@ plt.style.use('classic')
 fig.patch.set_facecolor('white')
 
 
-plt.ylabel('velocity amplitude (m)', fontsize = 12)
-# plt.xlim(0.01,100)
-plt.loglog(freq_list[ind] , spec_list[ind], color = 'green', label = 'event spectra')
-plt.grid()
-plt.loglog(freq_list[ind], Brune_list[ind], color = 'blue', label = 'Brune spectra')
-plt.legend(loc = 'lower left', fontsize = 12)
-plt.xlabel('frequency (Hz)', fontsize = 12)
-# plt.title('event ID: 38475431 \nmagnitude : 4.15)
-plt.title('event id:'+id_list[ind]+', magnitude: M'+str(mag_list[ind]), fontsize = 12, loc='left')
-plt.tick_params(axis='both', which='major', labelsize=12)
-plt.tick_params(axis='both', which='both', length = 5, width = 1)
+# plt.ylabel('velocity amplitude (m)', fontsize = 12)
+# # plt.xlim(0.01,100)
+# plt.loglog(freq_list[ind] , spec_list[ind], color = 'green', label = 'event spectra')
+# plt.grid()
+# plt.loglog(freq_list[ind], Brune_list[ind], color = 'blue', label = 'Brune spectra')
+# plt.legend(loc = 'lower left', fontsize = 12)
+# plt.xlabel('frequency (Hz)', fontsize = 12)
+# # plt.title('event ID: 38475431 \nmagnitude : 4.15)
+# plt.title('event id:'+id_list[ind]+', magnitude: M'+str(mag_list[ind]), fontsize = 12, loc='left')
+# plt.tick_params(axis='both', which='major', labelsize=12)
+# plt.tick_params(axis='both', which='both', length = 5, width = 1)
 # plt.text(0.7, .1, 'Median log(diff) 1-32.7 Hz (demeaned): ' + str(round(sum_list[ind],3)), fontsize = 16)
 
-plt.savefig('/Users/emmadevin/Work/USGS 2021/Figures/SCEC/Brune_example.pdf')
-plt.show()
+# plt.savefig('/Users/emmadevin/Work/USGS 2021/Figures/SCEC/Brune_example.pdf')
+# plt.show()
 
 
 
-# #write the constraint file in linear space to agree with the event and station spectra
-# if writefile == 'yes':
-#     outfile = open(working_dir + '/constraint/constraint_' + id_list[ind] + '.out', 'w')
-#     out = np.array([freq_untrimmed_list[ind],10.**(cf_list[ind])]).T
-#     outfile.write('#freq_bins \t cf_m \n')
-#     np.savetxt(outfile, out, fmt='%E', delimiter='\t')
-#     outfile.close()
-    
-for ind in range(len(Brune_list_untrimmed)):
-    outfile = open(working_dir + '/Brune_spectra/' + id_list[ind] + '.out', 'w')
-    out = np.array([freq_untrimmed_list[ind],Brune_list_untrimmed[ind]]).T
-    outfile.write('#freq_bins \t brune \n')
+#write the constraint file in linear space to agree with the event and station spectra
+if writefile == 'yes':
+    outfile = open(working_dir + '/constraint/constraint_' + id_list[ind] + '.out', 'w')
+    out = np.array([freq_untrimmed_list[ind],10.**(cf_list[ind])]).T
+    outfile.write('#freq_bins \t cf_m \n')
     np.savetxt(outfile, out, fmt='%E', delimiter='\t')
     outfile.close()
+    
+# for ind in range(len(Brune_list_untrimmed)):
+#     outfile = open(working_dir + '/Brune_spectra/' + id_list[ind] + '.out', 'w')
+#     out = np.array([freq_untrimmed_list[ind],Brune_list_untrimmed[ind]]).T
+#     outfile.write('#freq_bins \t brune \n')
+#     np.savetxt(outfile, out, fmt='%E', delimiter='\t')
+#     outfile.close()
 
