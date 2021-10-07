@@ -1,1 +1,0 @@
-# earthquake_source_spectra
