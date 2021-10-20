@@ -16,14 +16,14 @@ import glob
 import pandas as pd
 
 # working directory
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim+'
 
 # event directories and outpath
 event_dirs = glob.glob(working_dir + '/RC_beta/*')
 outpath = working_dir + '/corrected/'
 
 # station ids
-stn_ids = pd.read_csv( '/Users/emmadevin/Work/USGS 2021/Data/stations.csv')
+stn_ids = pd.read_csv( '/Users/emmadevin/Work/USGS 2021/Data/Prelim+/Station_info/stations.csv')
 
 # create list of event directory names
 events = []
@@ -46,7 +46,6 @@ for event in events:
     
     # create list of all files in event directory
     file_list = glob.glob(event_dir + '/*.ms')
-    print(len(file_list))
     
     # read in *.csv that says which response file to use
     r = pd.read_csv(event_dir + '/station_inv.csv')

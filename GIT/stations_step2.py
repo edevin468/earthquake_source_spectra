@@ -33,7 +33,7 @@ def search(file_name, string):
 # END FUNCTION DEFINITIONS #
 
 # working directory
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim+'
 
 # event directories and outpath
 event_dirs = glob.glob(working_dir + '/RC_beta/*')
@@ -68,4 +68,4 @@ for event in events:
                 
         df[str(typ)] = check
  
-    df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/RC_beta/'+event+'/station_inv.csv')
+    df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim+/RC_beta/'+event+'/station_inv.csv')

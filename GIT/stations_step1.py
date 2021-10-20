@@ -16,7 +16,7 @@ import glob
 import pandas as pd
 
 # working directory
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim+'
 
 # event directories and outpath
 event_dirs = glob.glob(working_dir + '/RC_beta/*')
@@ -57,4 +57,4 @@ for event in events:
     df = pd.DataFrame()
     df['station_id'] = stn_ids
                 
-    df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/RC_beta/'+event+'/stations.csv')
+    df.to_csv(working_dir + '/RC_beta/'+event+'/stations.csv')

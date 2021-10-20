@@ -16,7 +16,7 @@ import glob
 import pandas as pd
 
 # working directory
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim+'
 
 # event directories and outpath
 event_dirs = glob.glob(working_dir + '/RC_beta/*')
@@ -69,4 +69,4 @@ for stn_id in stn_ids:
 df['network'] = ntwk_list
 df['station'] = stn_list
             
-df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/stations.csv')
+df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim+/stations.csv')
