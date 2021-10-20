@@ -1,4 +1,3 @@
-README
 Estimating stress drop using the Generalized Inversion Technique (GIT)
 
 Step 1
@@ -48,5 +47,5 @@ Step 8
 INPUT: all files in Andrews_inversion_constrained directory
 Script: fitBrune.py
 Purpose: take constrained event spectra, preform non-linear least squares inversion and find a best fit moment and corner frequency for the brune model for each event, then use those parameters to calculate stress drop for each event
-OUTPUT: dataframe containing for each event: event id, magnitude, catalog moment, guessed fc, various goodness-of-fit parameters, best fit fc, best fit moment, and stress drop
+OUTPUT: dataframe containing for each event: event id, magnitude, catalog moment, guessed fc, various goodness-of-fit parameters, best fit fc, best fit moment, and stress drop, saved into stress_drop directory
 
