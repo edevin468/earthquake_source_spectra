@@ -23,7 +23,7 @@ stressdrop = 5e6 #5e6 pascals
 U = 0.63#0.63
 rho = 2750. #2750kg/m^3
 
-working_dir =  '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+working_dir =  '/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered'
 event_spectra_dir = working_dir + '/Andrews_inversion/Events/'
 event_list = glob.glob(event_spectra_dir + '*.out')
 
@@ -253,10 +253,10 @@ if writefile == 'yes':
     np.savetxt(outfile, out, fmt='%E', delimiter='\t')
     outfile.close()
     
-# for ind in range(len(Brune_list_untrimmed)):
-#     outfile = open(working_dir + '/Brune_spectra/' + id_list[ind] + '.out', 'w')
-#     out = np.array([freq_untrimmed_list[ind],Brune_list_untrimmed[ind]]).T
-#     outfile.write('#freq_bins \t brune \n')
-#     np.savetxt(outfile, out, fmt='%E', delimiter='\t')
-#     outfile.close()
+for ind in range(len(Brune_list_untrimmed)):
+    outfile = open(working_dir + '/Brune_spectra/' + id_list[ind] + '.out', 'w')
+    out = np.array([freq_untrimmed_list[ind],Brune_list_untrimmed[ind]]).T
+    outfile.write('#freq_bins \t brune \n')
+    np.savetxt(outfile, out, fmt='%E', delimiter='\t')
+    outfile.close()
 

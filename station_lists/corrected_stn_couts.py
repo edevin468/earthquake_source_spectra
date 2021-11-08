@@ -8,8 +8,8 @@ Created on Tue Aug 10 09:33:45 2021
 
 import pandas as pd
 
-small = pd.read_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/station_counts.csv')
-big = pd.read_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/station_locs.csv')
+small = pd.read_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim+/Station_info/station_counts.csv')
+big = pd.read_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim+/Station_info/station_locs.csv')
 
 
 stn_list = small['station'].tolist()
@@ -37,6 +37,6 @@ small['latitude'] = small_lats
 small['longitude'] = small_lons
 small['network'] = ntwks
 
-small.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/station_counts.csv')
+small.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim+/Station_info/station_counts.csv')
     
     

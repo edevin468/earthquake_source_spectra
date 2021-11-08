@@ -13,9 +13,10 @@ import glob
 import pandas as pd
 from random import randint
 
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/All_M3+/RC_M3above'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered/RC_beta'
 
 eventlist = glob.glob(working_dir + '/*')
+
 
 for event in eventlist:
     

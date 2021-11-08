@@ -11,28 +11,25 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import glob
 
-
+fig = plt.figure(figsize = (5,5))
+plt.style.use('classic')
+fig.patch.set_facecolor('white')
 
 
 
  
     
-path = glob.glob('/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered/Andrews_inversion/Events/*.out')
+path = glob.glob('/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered/record_spectra/*/*.out')
 
 for i in range(len(path)):
     data = np.genfromtxt(path[i], dtype = float, comments = '#', delimiter = None, usecols = (0,1,2)) #only read in first two cols
 
     freq = data.T[0]
     spectra = data.T[1]
-    spec_err = data.T[2]
     
     
-    fig = plt.figure(figsize = (8,4))
-    plt.style.use('classic')
-    fig.patch.set_facecolor('white')
-    plt.plot(freq, spectra, lw=3,c= 'k')
-    plt.errorbar(freq, spectra,yerr = spec_err , c='k')
-    plt.title('', loc='left')
+    plt.plot(freq, spectra, c= 'k')
+    plt.title('(a)', loc='left')
     plt.xlim(0.04, 50)
     # plt.ylim(10**-4,10**2)
     plt.xscale('log')

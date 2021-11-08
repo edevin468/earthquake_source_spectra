@@ -29,7 +29,7 @@ from spec_func import bin_max_err
 import time
 
 #working directory here
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered'
 
 #path to corrected seismograms
 event_dirs = glob.glob(working_dir + '/corrected/*')

@@ -33,7 +33,7 @@ def search(file_name, string):
 # END FUNCTION DEFINITIONS #
 
 # working directory
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim+'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered'
 
 # event directories and outpath
 event_dirs = glob.glob(working_dir + '/RC_beta/*')
@@ -60,6 +60,7 @@ for event in events:
         check = []
         filename = path.basename(file)
         typ = filename.split('.')[1]
+        
         for stn in stns:
             if search(file,str(stn)):
                 check.append(True)
@@ -67,5 +68,28 @@ for event in events:
                 check.append(False)
                 
         df[str(typ)] = check
+        
+        
+
+    type_list = []
+    for i in range(len(df)):
+        scedc = df['scedc'].tolist()
+        ncedc = df['ncedc'].tolist()
+        iris = df['iris'].tolist()
+        
+        if scedc[i]==True: type_list.append('scedc')
+        elif ncedc[i]==True: type_list.append('ncedc')
+        elif iris[i]==True: type_list.append('iris')
+        else: type_list.append('none')
+        
+    df['type'] = type_list
+        
+    
+
+
  
-    df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim+/RC_beta/'+event+'/station_inv.csv')
+    df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered/RC_beta/'+event+'/station_inv.csv')
+    
+    
+    
+    

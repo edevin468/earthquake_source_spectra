@@ -15,19 +15,19 @@ import os.path as path
 import glob
 import pandas as pd
 import warnings
-
+import time
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
 # working directory
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim+'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered'
 
 # event directories and outpath
 event_dirs = glob.glob(working_dir + '/RC_beta/*')
 outpath = working_dir + '/corrected/'
 
 # station ids
-stn_ids = pd.read_csv( '/Users/emmadevin/Work/USGS 2021/Data/Prelim+/Station_info/stations.csv')
+stn_ids = pd.read_csv( '/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered/Station_info/stations.csv')
 
 # create list of event directory names
 events = []
@@ -35,15 +35,18 @@ for i in range(len(event_dirs)):
     events.append(path.basename(event_dirs[i]))
     
 # create out directories for corrected events   
-for i in range(len(events)):
-    if not path.exists(outpath + '/' + events[i]):
-        os.makedirs(outpath + '/'  + events[i])
+# for i in range(len(events)):
+#     if not path.exists(outpath + '/' + events[i]):
+#         os.makedirs(outpath + '/'  + events[i])
+        
+        
 
 # loop through *.ms files and apply instrument corrections and save the resulting files   
 uncorrected = []      
 for event in events: 
+
+    
     print(event)
-    event_dir = working_dir + '/RC_beta/' + event
    
     # event directory
     event_dir = working_dir + '/RC_beta/' + event
@@ -53,9 +56,18 @@ for event in events:
     
     # read in *.csv that says which response file to use
     r = pd.read_csv(event_dir + '/station_inv.csv')
+    
+    # load inventory files
+    inv1 = op.read_inventory(event_dir + '/' + event + '.scedc.xml')
+    inv2 = op.read_inventory(event_dir + '/' + event + '.ncedc.xml')
+    inv3 = op.read_inventory(event_dir + '/' + event + '.iris.xml')
+
 
     
     for file in file_list: 
+        
+        t1 = time.time()
+        
         # read in file and determine station 
         st = read(file)
         filename = path.basename(file)
@@ -67,21 +79,23 @@ for event in events:
         row = r.loc[r['station_id']==stn_id]
         row = row.reset_index()
         
-        if row.loc[0,'scedc']==True:
-            inv = op.read_inventory(event_dir + '/' + event + '.scedc.xml')
-            # print('scedc')
-        elif row.loc[0,'iris']==True:
-            inv = op.read_inventory(event_dir + '/' + event + '.iris.xml')
-            # print('iris')
-        elif row.loc[0,'ncedc']==True:
-            inv = op.read_inventory(event_dir + '/' + event + '.ncedc.xml')
-            # print('ncedc')
-        else:
-            # print('No response data for ', filename)
+        if row.loc[0,'type']=='none':
             uncorrected.append(filename)
-            continue
+        elif row.loc[0,'type']=='scedc':
+            inv = inv1
+        elif row.loc[0,'type']=='ncedc':
+            inv = inv2
+        elif row.loc[0,'type']=='iris':
+            inv = inv3
+        
             
-            
+        t2 = time.time() 
+        
+        # print('Time to determine which inv file to use: ', (t2-t1))
+        
+         
+        t1 = time.time()
+        
         # extract trace and make copy of it
         tr = st[0] 
         tr_corrected=tr.copy()
@@ -94,6 +108,12 @@ for event in events:
         # detrend
         tr_corrected.detrend('linear')
         
+        t2 = time.time() 
+        # print('Time extract trace and detrend: ', (t2-t1))
+        
+        
+        t1 = time.time()
+        
         # remove instrument response, if any exception occurs, move on and add to list of uncorrected
         try: 
             tr_corrected.remove_response(inventory=inv,output='VEL',pre_filt=pre_filt,water_level=60,taper=False,plot=False)
@@ -101,8 +121,12 @@ for event in events:
             uncorrected.append(filename)
             continue
         
+        t2 = time.time()
+        
+        print('Time remove instrument response: ', (t2-t1))
+        
         # write miniseed files  
-        filename = filename.replace('ms', 'mseed')
-        tr_corrected.write(outpath + event + '/' + filename)
+        # filename = filename.replace('ms', 'mseed')
+        # tr_corrected.write(outpath + event + '/' + filename)
         
         

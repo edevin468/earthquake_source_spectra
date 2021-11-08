@@ -33,7 +33,7 @@ def search(file_name, string):
 # END FUNCTION DEFINITIONS #
 
 # working directory
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim+'
 
 # event directories and outpath
 event_dirs = glob.glob(working_dir + '/RC_beta/*')
@@ -74,4 +74,4 @@ station_locs['longitude'] =lon
 sl = station_locs.drop_duplicates()
 sl = sl.drop([0])
 
-sl.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/station_locs.csv')
+sl.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim+/Station_info/station_locs.csv')

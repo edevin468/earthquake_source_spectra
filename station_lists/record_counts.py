@@ -15,7 +15,7 @@ import pandas as pd
 
 
 
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim/record_spectra'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim+/record_spectra'
 
 file_list = glob.glob(working_dir +'/*/*')
 station_list = []
@@ -43,4 +43,4 @@ df = pd.DataFrame()
 df['station'] = station_list
 df['count'] = counts
 
-# df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim/station_counts.csv')
+df.to_csv('/Users/emmadevin/Work/USGS 2021/Data/Prelim+/station_counts.csv')

@@ -22,7 +22,7 @@ import os.path as path
 import matplotlib.pyplot as plt
 
 
-working_dir =  '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+working_dir =  '/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered'
 
 #fill in constraint event
 secondo_dir = '/constraint'
@@ -44,23 +44,25 @@ ev = np.genfromtxt(ev_file)
 
 
 
-fig = plt.figure(figsize = (8,6))
+fig = plt.figure(figsize = (8,4))
 plt.style.use('classic')
 fig.patch.set_facecolor('white')
-plt.plot(con.T[0], con.T[1], label = 'contsraint function')
-plt.plot(ev.T[0],ev.T[1], c = 'r',label = 'constraint event spectra')
-plt.plot(brun.T[0],brun.T[1], c='c',lw = 2, label = 'constraint event brune spectra')
-plt.plot(ev.T[0], ev.T[1]/con.T[1], c = 'k', ls = '--',label = 'constraint applied to constraint event')
+plt.plot(con.T[0], con.T[1], c='green', lw = 2,label = 'constraint \nfunction')
+plt.plot(ev.T[0],ev.T[1], c = 'blue',lw = 2,label = 'constraint \nevent spectra')
+plt.plot(brun.T[0],brun.T[1], c='skyblue',lw = 4, label = 'constraint event \nbrune spectra')
+plt.plot(ev.T[0], ev.T[1]/con.T[1], c = 'k',lw = 2, ls = '--',label = 'constraint \napplied to \nconstraint event')
+plt.title('(c)', loc='left')
+plt.xlim(0.04,50)
 plt.xscale('log')
 plt.yscale('log')
-plt.xlabel('frequency')
+plt.xlabel('frequency (Hz)')
 plt.ylabel('velocity amplitude (m)')
-plt.legend(loc= 'lower left')
-plt.grid()
+plt.legend(fontsize = 11,bbox_to_anchor=(1.42, 0.8))
+# plt.grid()
 
 
-secondo_ev =  glob.glob(working_dir + '/Andrews_inversion/Events' + '/*.out')
-secondo_stn = glob.glob(working_dir + '/Andrews_inversion/Stations' + '/*.out')
+# secondo_ev =  glob.glob(working_dir + '/Andrews_inversion/Events' + '/*.out')
+# secondo_stn = glob.glob(working_dir + '/Andrews_inversion/Stations' + '/*.out')
 
 # ##not in log space anymore
 # for i in range(len(secondo_ev)):#for each event
