@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nrml
+xmlns="http://openquake.org/xmlns/nrml/0.5"
+xmlns:gml="http://www.opengis.net/gml"
+>
+    <logicTree
+    logicTreeID="SERASiteResp"
+    >
+        <logicTreeBranchingLevel
+        branchingLevelID="SERASR"
+        >
+            <logicTreeBranchSet
+            applyToTectonicRegionType="Active Shallow Crust"
+            branchSetID="SERA"
+            uncertaintyType="gmpeModel"
+            >
+                <logicTreeBranch
+                branchID="KothaInfVs30"
+                >
+                    <uncertaintyModel>
+                        KothaEtAl2020ESHM20
+                    </uncertaintyModel>
+                    <uncertaintyWeight>
+                        0.2
+                    </uncertaintyWeight>
+                </logicTreeBranch>
+                <logicTreeBranch
+                branchID="KothaGeology"
+                >
+                    <uncertaintyModel>
+                         KothaEtAl2020ESHM20SlopeGeology
+                    </uncertaintyModel>
+                    <uncertaintyWeight>
+                        0.2
+                    </uncertaintyWeight>
+                </logicTreeBranch>
+                <logicTreeBranch
+                branchID="EC8Pitilakis"
+                >
+                    <uncertaintyModel>
+                        [PitilakisEtAl2018]
+                        gmpe_name = "KothaEtAl2020ESHM20"
+                    </uncertaintyModel>
+                    <uncertaintyWeight>
+                        0.2
+                    </uncertaintyWeight>
+                </logicTreeBranch>
+                <logicTreeBranch
+                branchID="EC8Ampl"
+                >
+                    <uncertaintyModel>
+                        [Eurocode8Amplification]
+                        gmpe_name = "KothaEtAl2020ESHM20"
+                    </uncertaintyModel>
+                    <uncertaintyWeight>
+                        0.13
+                    </uncertaintyWeight>
+                </logicTreeBranch>
+                <logicTreeBranch
+                branchID="EC8AmplDef"
+                >
+                    <uncertaintyModel>
+                        [Eurocode8AmplificationDefault]
+                        gmpe_name = "KothaEtAl2020ESHM20"
+                    </uncertaintyModel>
+                    <uncertaintyWeight>
+                        0.13
+                    </uncertaintyWeight>
+                </logicTreeBranch>
+                <logicTreeBranch
+                branchID="SD2018"
+                >
+                    <uncertaintyModel>
+                        [SandikkayaDinsever2018]
+                        gmpe_name = "KothaEtAl2020ESHM20"
+                        [SandikkayaDinsever2018.phi_0]
+                        "PGV" = 0.446525247049620
+                        "PGA" = 0.467151252053241
+                        "SA(0.01)" = 0.467206938011971
+                        "SA(0.025)" = 0.468698397037258
+                        "SA(0.04)" = 0.473730661220076
+                        "SA(0.05)" = 0.479898166019243
+                        "SA(0.07)" = 0.487060899687138
+                        "SA(0.1)" = 0.496152397155402
+                        "SA(0.15)" = 0.497805936702476
+                        "SA(0.2)" = 0.494075956910651
+                        "SA(0.25)" = 0.488950837091220
+                        "SA(0.3)" = 0.482157450259502
+                        "SA(0.35)" = 0.480254056040507
+                        "SA(0.4)" = 0.475193646646757
+                        "SA(0.45)" = 0.469672671050266
+                        "SA(0.5)" = 0.463165027132890
+                        "SA(0.6)" = 0.451206692163190
+                        "SA(0.7)" = 0.446704739768374
+                        "SA(0.75)" = 0.444311331912854
+                        "SA(0.8)" = 0.439300059540554
+                        "SA(0.9)" = 0.433043490235851
+                        "SA(1.0)" = 0.426703815544157
+                        "SA(1.2)" = 0.416539877732589
+                        "SA(1.4)" = 0.409641113489270
+                        "SA(1.6)" = 0.404985162254916
+                        "SA(1.8)" = 0.399057812399511
+                        "SA(2.0)" = 0.396502973620567
+                        "SA(2.5)" = 0.393288023064441
+                        "SA(3.0)" = 0.390859427279163
+                        "SA(3.5)" = 0.388102875218375
+                        "SA(4.0)" = 0.386956009422453
+                        "SA(4.5)" = 0.372827866334900
+                        "SA(5.0)" = 0.377458812369736
+                        "SA(6.0)" = 0.384862538848542
+                        "SA(7.0)" = 0.385850838707000
+                        "SA(8.0)" = 0.387633769846605
+                     </uncertaintyModel>
+                     <uncertaintyWeight>
+                        0.14
+                    </uncertaintyWeight>
+                </logicTreeBranch>
+            </logicTreeBranchSet>
+        </logicTreeBranchingLevel>
+    </logicTree>
+</nrml>

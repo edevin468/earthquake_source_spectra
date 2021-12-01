@@ -169,7 +169,7 @@ for i in range(len(event_list)):
     sd_std = np.sqrt(dsd_dM0**2*M0_std**2 + dsd_dfc**2*fc_std**2)
     sd_std_list.append(sd_std/10**6)
     
-    # make plot for each event to visually compare best fit curve with data
+    # make plot for each event to visually compare best fit curvlitudee with data
     beta = out.params['beta'].value
     U = out.params['U'].value
     rho = out.params['rho'].value
@@ -180,22 +180,22 @@ for i in range(len(event_list)):
     Brune_spec = (2.*np.pi*(freq)*omega0)/(1.+((1./fc)*freq)**2.)
     Brune_spec_guess = (2.*np.pi*(freq)*omega0)/(1.+((1./Brune_fc)*freq)**2.)
     
-    fig = plt.figure(figsize = (4,4))
+    fig = plt.figure(figsize = (6,4))
     plt.style.use('classic')
     fig.patch.set_facecolor('white')
     plt.plot(freq, spec, c = 'b', label='constrained event spectra')
-    plt.plot(freq, Brune_spec, c ='r', label = r'Brune w/ best fit $f_c$')
-    plt.plot(freq, Brune_spec_guess, c ='gray', ls= '--',label = r'Brune w/ starting $f_c$')
+    plt.plot(freq, Brune_spec, c ='r', label = r'best-fit Brune model')
+    plt.plot(freq, Brune_spec_guess, c ='gray', ls= '--',label = r'initial Brune model')
     plt.xscale('log')
     plt.yscale('log')
     plt.xlim(freq[0],freq[-1])
-    plt.ylabel('velocity amp (m)')
+    plt.ylabel('velocity amplitude (m)')
     plt.xlabel('frequncy (Hz)')
-    plt.title('(' + letters[i] + ') event: '+ id_list[i]+', M'+str(mag_list[i]), loc = 'left', fontsize = 11)
+    # plt.title('(' + letters[i] + ') event: '+ id_list[i]+', M'+str(mag_list[i]), loc = 'left', fontsize = 11)
     plt.legend(loc='lower center', ncol=1)
     # plt.grid()
     
-    # plt.savefig(working_dir + '/fc_fitting_plots_for_workshop/' + id_list[i] + '.png', bbox_inches='tight')
+    plt.savefig(working_dir + '/fc_fitting_plots/' + id_list[i] + '.png', bbox_inches='tight')
     
     print(fit_report(out.params))
     

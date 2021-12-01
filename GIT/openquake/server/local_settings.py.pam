@@ -1,0 +1,22 @@
+# This feature requires:
+#  - https://github.com/FirefighterBlu3/python-pam
+#  - https://github.com/cnobile2012/django-pam
+
+from openquake.server.settings import INSTALLED_APPS, AUTHENTICATION_BACKENDS
+
+# Enable authentication
+LOCKDOWN = True
+# Disable sharing of results across users
+ACL_ON = True
+
+
+INSTALLED_APPS += (
+    'django_pam',
+)
+
+AUTHENTICATION_BACKENDS += (
+    'django_pam.auth.backends.PAMBackend',
+)
+
+#Static Folder
+STATIC_ROOT = ''

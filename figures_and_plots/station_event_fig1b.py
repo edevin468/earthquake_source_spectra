@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import glob
 
-fig = plt.figure(figsize = (5,5))
+fig = plt.figure(figsize = (3,5))
 plt.style.use('classic')
 fig.patch.set_facecolor('white')
 

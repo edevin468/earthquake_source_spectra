@@ -44,20 +44,21 @@ ev = np.genfromtxt(ev_file)
 
 
 
-fig = plt.figure(figsize = (8,4))
+fig = plt.figure(figsize = (5,4))
 plt.style.use('classic')
 fig.patch.set_facecolor('white')
 plt.plot(con.T[0], con.T[1], c='green', lw = 2,label = 'constraint \nfunction')
 plt.plot(ev.T[0],ev.T[1], c = 'blue',lw = 2,label = 'constraint \nevent spectra')
 plt.plot(brun.T[0],brun.T[1], c='skyblue',lw = 4, label = 'constraint event \nbrune spectra')
 plt.plot(ev.T[0], ev.T[1]/con.T[1], c = 'k',lw = 2, ls = '--',label = 'constraint \napplied to \nconstraint event')
-plt.title('(c)', loc='left')
-plt.xlim(0.04,50)
+# plt.title('(c)', loc='left')
+plt.xlim(0.964784333/20,0.964784333*5)
+plt.ylim(10**-1,10**2)
 plt.xscale('log')
 plt.yscale('log')
 plt.xlabel('frequency (Hz)')
 plt.ylabel('velocity amplitude (m)')
-plt.legend(fontsize = 11,bbox_to_anchor=(1.42, 0.8))
+plt.legend(fontsize = 8,bbox_to_anchor=(1.2, -0.2),ncol= 4)
 # plt.grid()
 
 

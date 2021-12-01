@@ -1,0 +1,71 @@
+{% extends "engine/base.html" %}
+  <title>{% block title %}OpenQuake engine: outputs from calculation {{ calc_id }}{% endblock %}</title>
+
+  {% block main %}
+  <div class="content-wrap">
+    <div class="container">
+      <div class="row">
+        <div id="oq-body-wrapper">
+          <div class="span12">
+              <h2>Outputs from calculation {{ calc_id }}</h2>
+              <div id="my-outputs" class="well"></div>
+              <div id="my-datastore">
+                <a href="/v1/calc/{{ calc_id }}/datastore"
+                   title="Size: {{ size_mb }} MB" class="btn btn-sm">
+                  Download hdf5 datastore</a>
+              </div>
+              {% if hmaps %}
+              <div id="my-hmaps">
+                <a href="/v1/calc/{{ calc_id }}/hmap_0_0" class="btn btn-sm">
+                  Show hazard map</a>
+              </div>
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    </div> <!-- /.container -->
+  </div>
+  {% endblock main %}
+
+  {% block templates %}
+  <script type="text/template" id="output-table-template">
+    <table id="output_table" class="table table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th style="width: 500px;">Name</th>
+          <th>Type</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% _.each(outputs, function(output) { %>
+        <tr class="success">
+          <td><%= output.get('id') || 'New' %></td>
+          <td><%= output.get('name') %></td>
+          <td <% if (output.get('size_mb')) { %>title="Size: <%= Math.max((Math.round(output.get('size_mb') * 100) / 100), 0.01).toFixed(2) %>MB"<% } %>><%= output.get('type') %></td>
+          <td>
+            <table class="table table-disable-hover table-condensed">
+            <% _.each(output.get('outtypes'), function(outtype) { %>
+              <tr>
+                <td><a href="/v1/calc/result/<%= output.get('id') %>?export_type=<%= outtype %>" class="btn btn-sm">Download <%= outtype %></a></td>
+              </tr>
+            <% }); %>
+            </table>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </script>
+
+  {% endblock templates %}
+
+  {% block extra_script %}
+  {{ block.super }}
+  <script type="text/javascript"><!--
+    var gem_calc_id = '{{ calc_id }}';
+    //-->
+    </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/engine_get_outputs.js"></script>
+  {% endblock extra_script %}

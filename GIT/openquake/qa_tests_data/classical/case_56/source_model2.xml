@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<nrml xmlns:gml="http://www.opengis.net/gml"
+      xmlns="http://openquake.org/xmlns/nrml/0.4">
+  <sourceModel name="Contains a far away source">
+    <pointSource id="2" name="Point Source"
+                 tectonicRegion="Active Shallow Crust">
+      <pointGeometry>
+        <gml:Point>
+          <gml:pos>
+            10 0
+          </gml:pos>
+        </gml:Point>
+        <upperSeismoDepth>0</upperSeismoDepth>
+        <lowerSeismoDepth>10</lowerSeismoDepth>
+      </pointGeometry>
+      <magScaleRel>WC1994</magScaleRel>
+      <ruptAspectRatio>1.0</ruptAspectRatio>
+      <truncGutenbergRichterMFD aValue="4.0" bValue="1.0"
+                                minMag="5.0" maxMag="6.5" />
+      <nodalPlaneDist>
+        <nodalPlane probability="1.0" strike="0.0"
+                    dip="90.0" rake="0.0" />
+      </nodalPlaneDist>
+      <hypoDepthDist>
+        <hypoDepth probability="1." depth="10.0" />
+      </hypoDepthDist>
+    </pointSource>  
+  </sourceModel>
+</nrml>

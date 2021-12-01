@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<nrml xmlns:gml="http://www.opengis.net/gml" 
+      xmlns="http://openquake.org/xmlns/nrml/0.5">
+
+<exposureModel id="exposure1" category="buildings">
+  <description>A flexible exposure model</description>
+
+  <conversions>
+    <area type="per_asset" unit="SQM" />
+    <costTypes>
+      <costType name="structural" type="per_area" unit="USD" />
+      <costType name="nonstructural" type="per_asset" unit="USD" />
+      <costType name="contents" type="per_asset" unit="USD" />
+    </costTypes>
+  </conversions>
+
+  <exposureFields>
+    <field input="ASSET_ID" oq="id"/>
+    <field input="LONGITUDE" oq="lon" />
+    <field input="LATITUDE" oq="lat" />
+    <field input="TAXONOMY" oq="taxonomy" />
+    <field input="BUILDINGS" oq="number" />
+    <field input="AREA_PER_DWELLING_SQM" oq="area" />
+    <field input="COST_PER_AREA_USD" oq="structural" />
+    <field input="COST_NONSTRUCTURAL_USD" oq="nonstructural" />
+    <field input="COST_CONTENTS_USD" oq="contents" />
+    <field input="OCCUPANTS_PER_ASSET" oq="night" />
+  </exposureFields>
+
+  <occupancyPeriods>night</occupancyPeriods>
+  <tagNames>OCCUPANCY NAME_1 ID_1 NAME_2 ID_2</tagNames>
+  <assets>Example_Exposure.csv</assets>
+</exposureModel>
+
+</nrml>

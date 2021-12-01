@@ -27,7 +27,7 @@ for i in range(len(path)):
     spec_err = data.T[2]
     
     
-    fig = plt.figure(figsize = (8,4))
+    fig = plt.figure(figsize = (4,4))
     plt.style.use('classic')
     fig.patch.set_facecolor('white')
     plt.plot(freq, spectra, lw=3,c= 'k')

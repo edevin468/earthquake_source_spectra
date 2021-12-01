@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nrml
+xmlns="http://openquake.org/xmlns/nrml/0.5"
+xmlns:gml="http://www.opengis.net/gml"
+>
+    <exposureModel
+    category="buildings"
+    id="exp1"
+    >
+        <description>
+            multiple assets em
+        </description>
+        <conversions>
+            <area type="per_asset" unit="SQM"/>
+            <costTypes>
+                <costType name="structural" type="per_asset" unit="USD"/>
+                <costType name="nonstructural" type="per_asset" unit="USD"/>
+                <costType name="contents" type="per_asset" unit="USD"/>
+                <costType name="business_interruption" type="per_asset" unit="USD/month"/>
+            </costTypes>
+        </conversions>
+        <tagNames>
+            NAME_1
+        </tagNames>
+        <assets>
+            exposure_model.csv
+        </assets>
+    </exposureModel>
+</nrml>
