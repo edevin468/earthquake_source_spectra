@@ -15,7 +15,7 @@ import obspy as op
 from obspy import read
 import os
 import os.path as path
-import glob
+import glob 
 import warnings
 import time
 from progress_bar import progress_bar

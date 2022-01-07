@@ -29,7 +29,7 @@ working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
 outfile_path = working_dir + '/Andrews_inversion'
 
 # df with station locations
-stations = pd.read_csv(working_dir + '/station_locs.csv')
+stations = pd.read_csv(working_dir + '/Station_info/station_locs.csv')
 
 # list of record files
 record_list = glob.glob(working_dir + '/record_spectra/*/*')
@@ -171,7 +171,7 @@ ax1.set_yscale('log')
 ax1.set_xlim(6,11**2)
 ax1.set_ylim(5*10**-9, 5*10**-2)
 ax1.set_xlabel('distance (km)')
-ax1.set_ylabel('amplitude')
+ax1.set_ylabel('velocity amplitude (m)')
 ax1.set_title('(a) f = '+str(f2)+' Hz', loc= 'left', fontsize= 12)
 
 # leg = plt.legend(loc='upper center', bbox_to_anchor=(1.1, -0.2), facecolor = 'w', ncol = 4, fontsize = 10)
@@ -216,5 +216,5 @@ ax2.set_title('(b) f = '+str(f3)+' Hz', loc= 'left', fontsize= 12)
 
 # leg = plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), facecolor = 'w', ncol = 2, fontsize = 10)
 
-plt.savefig('/Users/emmadevin/Work/USGS 2021/Figures/SCEC/attenuation.pdf', bbox_inches='tight')
+# plt.savefig('/Users/emmadevin/Work/USGS 2021/Figures/SCEC/attenuation.pdf', bbox_inches='tight')
 

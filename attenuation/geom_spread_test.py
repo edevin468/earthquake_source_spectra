@@ -25,11 +25,11 @@ import matplotlib.pyplot as plt
 #make list of records and the corresponding events and stations
 
 # working directory and outfil path for inversion
-working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim'
+working_dir = '/Users/emmadevin/Work/USGS 2021/Data/Prelim_filtered'
 outfile_path = working_dir + '/Andrews_inversion'
 
 # df with station locations
-stations = pd.read_csv(working_dir + '/station_locs.csv')
+stations = pd.read_csv(working_dir + '/Station_info/station_locs.csv')
 
 # list of event folders
 ev = glob.glob(working_dir + '/record_spectra/*')

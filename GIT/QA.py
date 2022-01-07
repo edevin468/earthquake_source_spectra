@@ -70,6 +70,8 @@ for event in events:
         tr.plot(color = color)
         
         checklist.append(sta_lta)
+        
+        start = qa.signal_split(st, origin, model=None,picker_config=None,config=None)
         # checklist.append(qa.check_zero_crossings(st, min_crossings=0.1))
         # cft, tr = qa.check_zero_crossings(st, min_crossings=0.1)
         # plot_trigger(tr, cft, 1.5, 0.5)
